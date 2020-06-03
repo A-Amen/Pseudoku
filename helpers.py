@@ -55,7 +55,7 @@ def fill_box(canvas, pos, number):
                  pos[0] * const.box_size))
 
 
-def gameloop():
+def gameloop(clock, screen, canvas, model):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -68,6 +68,6 @@ def gameloop():
                     break
                     # quit()
         
-        helpers.update(screen, grid_canvas)
+        update(screen, canvas)
         pygame.display.update()
         clock.tick(30)
