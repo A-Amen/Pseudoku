@@ -14,7 +14,9 @@ def main():
     helpers.draw_horizontal(graphic_canvas)
     grid_model = grid("")
     grid_model.init_grid()
-    print(grid_model.grid_str)
+    grid_model.print_str()
+    grid_model.remove_boxes()
+    grid_model.print_str()
     clock = pygame.time.Clock()
     helpers.gameloop(clock, screen, graphic_canvas, number_canvas, grid_model)
 

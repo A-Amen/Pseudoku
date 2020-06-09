@@ -9,3 +9,4 @@ font_size = 36
 focused = (240, 223, 161)
 valid_keys = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5, pygame.K_6, pygame.K_7, 
               pygame.K_8, pygame.K_9, pygame.K_BACKSPACE, pygame.K_DELETE]
+numbers_array = [1, 2, 3, 4, 5, 6, 7, 8, 9]
