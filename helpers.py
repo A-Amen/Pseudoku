@@ -16,8 +16,11 @@ def keyboard_handle(keytype, canvas, keystring, pos, replace):
         fill_box(canvas, focus_pos, keystring)
 
 def grid_pos(mouse_pos):
+    # Grid pos returns the grid position as (horizontalPos, verticalPos).
+    #  Eg . top left is (0, 0), below it is (0, 1) and the top-right is (8, 0)
     box_horizontal = mouse_pos[0] // const.box_size
     box_vertical = mouse_pos[1] // const.box_size
+    print((box_horizontal, box_vertical))
     return int((box_vertical * 9) + box_horizontal)
 def draw_vertical(canvas):
     line_sep = const.grid_size / 9
@@ -53,7 +56,6 @@ def draw_horizontal(canvas):
 
 def fill_box(canvas, pos, number):
     # Fill a box on canvas at given position with the number
-
     # Create Surface
     box = pygame.Surface((const.box_size, const.box_size),
                          pygame.SRCALPHA, 32)
@@ -85,8 +87,9 @@ def focus_block(last_focus, to_focus, canvas):
     canvas.blit(focus_box, (focus_coord[0] + x_offset, focus_coord[1] + y_offset))
 
 def handle_mouse_event(grid_main, canvas):
+    # Handles mouse events.
     mouse_pos = pygame.mouse.get_pos()
-    grid_num = grid_pos(mouse_pos)
+    grid_num = grid_pos(mouse_pos) 
     # print(grid_num)
     if not grid_main.is_focused(grid_num) and grid_main.is_focusable(grid_num):
         last_focus = grid_main.get_focus()
@@ -98,11 +101,18 @@ def handle_mouse_event(grid_main, canvas):
                     # Focus
         focus_block(grid_num, True, canvas)
 
+def fill_static_boxes(canvas, grid_main):
+    for i in range(0, len(grid_main.grid_str)):
+        box_char = grid_main.grid_str[i]
+        if box_char != "_":
+            fill_box(canvas, ((i % 9), (i // 9)), box_char)
+
 def quit_game(running):
     pygame.quit()
     running = False
 def gameloop(clock, screen, canvas, number_canvas, grid_main):
     running = True
+    fill_static_boxes(number_canvas, grid_main)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

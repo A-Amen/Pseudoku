@@ -17,6 +17,7 @@ def main():
     grid_model.print_str()
     grid_model.remove_boxes()
     grid_model.print_str()
+    # helpers.fill_box(number_canvas, (0, 1), "1")
     clock = pygame.time.Clock()
     helpers.gameloop(clock, screen, graphic_canvas, number_canvas, grid_model)
 
