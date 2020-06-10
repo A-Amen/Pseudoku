@@ -5,21 +5,7 @@ import const
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((const.grid_size, const.grid_size), pygame.SRCALPHA, 32)
-    pygame.display.set_caption('Pseudoku')
-    graphic_canvas = pygame.Surface(screen.get_size())
-    number_canvas = pygame.Surface(screen.get_size(), pygame.SRCALPHA, 32)
-    graphic_canvas.fill(const.plain)
-    helpers.draw_vertical(graphic_canvas)
-    helpers.draw_horizontal(graphic_canvas)
-    grid_model = grid("")
-    grid_model.init_grid()
-    grid_model.print_str()
-    grid_model.remove_boxes()
-    grid_model.print_str()
-    # helpers.fill_box(number_canvas, (0, 1), "1")
-    clock = pygame.time.Clock()
-    helpers.gameloop(clock, screen, graphic_canvas, number_canvas, grid_model)
+    helpers.start_game()
 
 if __name__ == "__main__":
     main()

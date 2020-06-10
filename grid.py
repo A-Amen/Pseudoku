@@ -40,6 +40,7 @@ class grid:
     def print_str(self):
         for i in range(0, 9):
             print(self.grid_str[i * 9: i * 9 + 9])
+        print()
 
 
     def get_char_at_focus(self):
@@ -53,9 +54,9 @@ class grid:
         return grid_main
 
     def is_valid_solution(self):
-        print(check_rows(self.grid_str, "hori"))
-        print(check_rows(self.grid_str, "vert"))
-        print(check_rows(self.grid_str, "box"))
+        return (check_rows(self.grid_str, "hori") and
+                check_rows(self.grid_str, "vert") and
+                check_rows(self.grid_str, "box"))
 
     def is_focusable(self, pos):
         return pos in self.focus_indice
@@ -63,7 +64,8 @@ class grid:
     def remove_boxes(self):
         # try
         dupe_list = list(self.grid_str)
-        max_to_remove = random.randrange(30, 64)
+        max_to_remove = random.randrange(20, 64)
+        print(max_to_remove)
         while max_to_remove > 0:
             remove_pos = random.randrange(0, len(dupe_list))
             if dupe_list[remove_pos] != "_":
@@ -72,6 +74,8 @@ class grid:
                 self.focus_indice.append(remove_pos)
         self.grid_str = "".join(dupe_list)
 
+    def is_filled(self):
+        return not "_" in self.grid_str
 
 def generate_puzzle():
     dupe_array = const.numbers_array[:]
