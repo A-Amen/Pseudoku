@@ -1,4 +1,4 @@
-import pygame, const
+import pygame, const, time
 from grid import grid
 pygame.font.init()
 font = pygame.font.SysFont('Arial', const.font_size)
@@ -127,11 +127,20 @@ def quit_game(running):
     pygame.quit()
     running = False
 
-def fill_finish_canvas(canvas):
-    text_surf = font.render("Game Over", True, (0, 0, 0))
+def fill_finish_canvas(canvas, start_time, end_time):
+    solve_time = int(end_time - start_time)
+    mins, secs = divmod(solve_time, 60)
+    sec_str = "%02d"%secs
+    min_str = "%02d"%mins
+    time_str = "Success in " +min_str + ":" + sec_str +"!"
+    text_surf = font.render(time_str, True, (0, 0, 0))
+    restart_surf = font.render("Press R to restart. ", True, (0, 0, 0))
     w = canvas.get_width()
     h = canvas.get_height()
-    canvas.blit(text_surf, (w/2 - text_surf.get_width()/4, h/2 - text_surf.get_height()/4))
+    # print(end_time - start_time)
+    canvas.blit(text_surf, (w/2 - text_surf.get_width()/2, h/2 - text_surf.get_height()))
+    canvas.blit(restart_surf, (w/2 - text_surf.get_width()/2, h/2 + restart_surf.get_height()/2))
+    # canvas.blit(restart_surf, (w/2 ))
 
 def start_game():
     screen = pygame.display.set_mode((const.grid_size, const.grid_size), pygame.SRCALPHA, 32)
@@ -142,12 +151,11 @@ def start_game():
     draw_vertical(graphic_canvas)
     draw_horizontal(graphic_canvas)
     game_over_canvas = pygame.Surface(screen.get_size())
-    game_over_canvas.set_alpha(128)
+    game_over_canvas.set_alpha(215)
     game_over_canvas.fill(const.white)
     grid_model = grid("")
     grid_model.init_grid()
     grid_model.remove_boxes()
-    grid_model.print_str()
     clock = pygame.time.Clock()
     gameloop(clock, screen, graphic_canvas, number_canvas, grid_model, game_over_canvas)
 
@@ -156,17 +164,21 @@ def gameloop(clock, screen, canvas, number_canvas, grid_main, finish_canvas):
     complete = False
     reset = False
     fill_static_boxes(number_canvas, grid_main)
-    fill_finish_canvas(finish_canvas)
+    start_time = time.time()
+    end_time = None
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit_game(running)
             elif event.type == pygame.KEYDOWN:
+                if complete:
+                    if pygame.key.get_pressed()[pygame.K_r]:
+                        reset = True
+                        running = False
                 if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                     quit_game(running)
                 else:
                     keyboard_handle(event.key, number_canvas, event.unicode, grid_main.get_focus(), grid_main)
-                    grid_main.print_str()
             if event.type == pygame.MOUSEBUTTONUP:
                 handle_mouse_event(grid_main, canvas)
         if running:
@@ -176,5 +188,8 @@ def gameloop(clock, screen, canvas, number_canvas, grid_main, finish_canvas):
         if  (not complete) and grid_main.is_filled():
             if  grid_main.is_valid_solution():
                 complete = True
+                end_time = time.time()
+                fill_finish_canvas(finish_canvas, start_time, end_time)
+
     if reset:
         start_game()

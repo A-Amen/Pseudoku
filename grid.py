@@ -6,12 +6,6 @@ class grid:
         self.focus = focus
         self.focus_indice = []
 
-    def rotate_grid(self):
-        print("in rotate - " + self.grid_str)
-
-    def flip_grid(self):
-        print("in flip - " + self.grid_str)
-
     def get_char(self, index):
         return self.grid_str[index]
 
@@ -65,7 +59,7 @@ class grid:
         # try
         dupe_list = list(self.grid_str)
         max_to_remove = random.randrange(20, 64)
-        print(max_to_remove)
+        # print(max_to_remove)
         while max_to_remove > 0:
             remove_pos = random.randrange(0, len(dupe_list))
             if dupe_list[remove_pos] != "_":
