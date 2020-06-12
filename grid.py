@@ -6,6 +6,27 @@ class grid:
         self.focus = focus
         self.focus_indice = []
 
+    def key_shift_focus(self, direction):
+        # 1 = left, 2 = right, 3 = up, 4 = down.
+        offsets = [-1, 1, -9, 9]
+        focus_offset = offsets[direction-1]
+        tmp_focus = self.get_focus()
+        shifted = False
+        while not shifted:
+            if tmp_focus in self.focus_indice and tmp_focus != self.get_focus():
+                self.set_focus_index(tmp_focus)
+                shifted = True
+            elif tmp_focus + focus_offset < 0 or tmp_focus + focus_offset >= len(self.grid_str):
+                break
+            elif direction_check(focus_offset, tmp_focus):
+                break
+            elif tmp_focus not in self.focus_indice:
+                tmp_focus = tmp_focus + focus_offset
+                continue
+            else:
+                tmp_focus = tmp_focus + focus_offset
+        return shifted
+
     def get_char(self, index):
         return self.grid_str[index]
 
@@ -142,3 +163,10 @@ def shift_list(grid_list, shift_amt):
         tmp = grid_list[i]
         grid_list[i] = grid_list[i - shift_amt]
         grid_list[i - shift_amt] = tmp
+
+def direction_check(focus_offset, focus_pos):
+    if ((focus_pos % 9 == 0 and focus_offset == -1) or
+            (focus_pos %9 == 8 and focus_offset == 1)):
+        return True
+    else:
+        return False

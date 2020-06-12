@@ -8,7 +8,7 @@ def update(screen, canvas, number_canvas, finish_canvas, complete):
     if complete:
         screen.blit(finish_canvas, (0, 0))
 
-def keyboard_handle(keytype, canvas, keystring, pos, grid_main):
+def keyboard_handle(keytype, number_canvas, keystring, pos, grid_main, canvas):
     replace = False
     if keytype in const.valid_keys:
         if keytype == pygame.K_DELETE or keytype == pygame.K_BACKSPACE:
@@ -18,13 +18,28 @@ def keyboard_handle(keytype, canvas, keystring, pos, grid_main):
                 replace = True
         focus_pos = (pos % 9, pos // 9)
         if replace:
-            fill_box(canvas, focus_pos, "    ")
-        fill_box(canvas, focus_pos, keystring)
+            fill_box(number_canvas, focus_pos, "    ")
+        fill_box(number_canvas, focus_pos, keystring)
         if keystring == "    ":
             grid_main.fill_at_focus("_")
         else:
             grid_main.fill_at_focus(keystring)
-
+    elif (keytype == pygame.K_UP or keytype == pygame.K_DOWN or 
+          keytype == pygame.K_RIGHT or keytype == pygame.K_LEFT):
+        # shift focus
+        focus_shift = None
+        last_focus = grid_main.get_focus()
+        if keytype == pygame.K_UP:
+            focus_shift = 3
+        elif keytype == pygame.K_DOWN:
+            focus_shift = 4
+        elif keytype == pygame.K_LEFT:
+            focus_shift = 1
+        else:
+            focus_shift = 2
+        if grid_main.key_shift_focus(focus_shift):
+            focus_block(last_focus, False, canvas)
+            focus_block(grid_main.get_focus(), True, canvas)
 def grid_pos(mouse_pos):
     # Grid pos returns the grid position as (horizontalPos, verticalPos).
     #  Eg . top left is (0, 0), below it is (0, 1) and the top-right is (8, 0)
@@ -178,7 +193,7 @@ def gameloop(clock, screen, canvas, number_canvas, grid_main, finish_canvas):
                 if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                     quit_game(running)
                 else:
-                    keyboard_handle(event.key, number_canvas, event.unicode, grid_main.get_focus(), grid_main)
+                    keyboard_handle(event.key, number_canvas, event.unicode, grid_main.get_focus(), grid_main, canvas)
             if event.type == pygame.MOUSEBUTTONUP:
                 handle_mouse_event(grid_main, canvas)
         if running:
