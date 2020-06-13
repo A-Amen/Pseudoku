@@ -195,4 +195,4 @@ def direction_bool(focus_offset, focus_pos):
 
 def direction_check(focus_offset, focus_pos):
     """Keyboard handle function that ensures we dont go out of bounds"""
-    return direction_check(focus_offset, focus_pos)
+    return direction_bool(focus_offset, focus_pos)
