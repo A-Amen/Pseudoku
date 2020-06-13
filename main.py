@@ -1,7 +1,4 @@
-import pygame
-from grid import grid
-import helpers
-import const
+import pygame, helpers
 
 def main():
     pygame.init()
