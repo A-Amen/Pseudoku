@@ -202,6 +202,12 @@ def start_game():
     # Screen is the native surface to which we blit other surfaces
     screen = pygame.display.set_mode((const.grid_size, const.grid_size), pygame.SRCALPHA, 32)
     pygame.display.set_caption('Pseudoku')
+    icon_surface = pygame.image.load('emojis/icon.png')
+    icon_surface = pygame.transform.scale(icon_surface, (32, 32))
+    icon_surface.convert()
+    pygame.display.set_icon(icon_surface)
+    
+    # pygame.display.set_icon(icon_surface)
     # Graphic canvas is the surface that displays the background color and dividing borders
     graphic_canvas = pygame.Surface(screen.get_size())
     # Number canvas is the surface that displays the numbers in their boxes in Alpha
